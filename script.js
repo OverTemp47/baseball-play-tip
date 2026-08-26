@@ -105,16 +105,21 @@ function showCompletion(sharedResult = null) {
   const total = sharedResult?.total ?? sessionQuestions.length;
   const resultScore = sharedResult?.score ?? score;
   const resultMode = sharedResult?.level ?? sessionMode;
-  const rate = Math.round((resultScore / total) * 100);
+  const normalizedScore = getNormalizedScore(resultScore, total);
+  const rate = normalizedScore;
   displayedResult = { level: resultMode, score: resultScore, total };
   document.querySelector('[data-complete-level]').textContent = resultMode;
-  document.querySelector('[data-score]').textContent = resultScore;
-  document.querySelector('[data-total]').textContent = `/ ${total}`;
+  document.querySelector('[data-score]').textContent = normalizedScore;
+  document.querySelector('[data-total]').textContent = '/ 100';
   document.querySelector('[data-rate]').textContent = `${rate}%`;
   document.querySelector('[data-score-comment]').textContent = getScoreComment(rate);
   document.querySelector('[data-complete-progress]').textContent = `${total} / ${total}`;
   shareFeedback.hidden = true;
   showScreen('complete');
+}
+
+function getNormalizedScore(scoreValue, total) {
+  return Math.round((scoreValue / total) * 100);
 }
 
 function getScoreComment(rate) {
@@ -137,7 +142,8 @@ function getResultUrl(resultData) {
 
 function getShareSummary() {
   const resultData = displayedResult ?? { level: sessionMode, score, total: sessionQuestions.length };
-  return `[사회인 야구 주루 IQ 테스트]\n나의 주루 센스 점수는 **${resultData.score}점**!\n당신의 주루 IQ는 몇 점?\n👉 ${getResultUrl(resultData)}`;
+  const normalizedScore = getNormalizedScore(resultData.score, resultData.total);
+  return `[사회인 야구 주루 IQ 테스트]\n나의 주루 센스 점수는 **${normalizedScore}점**!\n당신의 주루 IQ는 몇 점?\n👉 ${getResultUrl(resultData)}`;
 }
 
 function showShareFeedback(message) {
