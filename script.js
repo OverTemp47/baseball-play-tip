@@ -59,7 +59,8 @@ function renderTrajectory(question) {
     // 다이아몬드가 45도 회전하므로 좌우 외야 좌표는 대칭으로 벌어집니다.
     좌익수: [-59, 90],
     // 중견수는 2루 베이스를 지나 더 깊은 중앙 외야까지 뻗도록 길게 잡습니다.
-    중견수: [-64, -64],
+    // 기존 중앙 외야보다 15% 짧게, 50도 방향으로 살짝 우측에 둡니다.
+    중견수: [-17, -48],
     우익수: [90, -59],
     '1루 파울라인': [140, 30],
     '3루 파울라인': [4, 140]
@@ -78,6 +79,9 @@ function renderTrajectory(question) {
   let path = `M ${start[0]} ${start[1]} L ${x} ${y}`;
   if (type === 'high-fly') path = `M ${start[0]} ${start[1]} Q ${(start[0] + x) / 2} ${(start[1] + y) / 2 - 32} ${x} ${y}`;
   if (type === 'shallow-fly') path = `M ${start[0]} ${start[1]} Q ${(start[0] + x) / 2} ${(start[1] + y) / 2 - 14} ${x} ${y}`;
+  if (targetName === '중견수' && !['high-fly', 'shallow-fly'].includes(type)) {
+    path = `M ${start[0]} ${start[1]} Q 70 30 ${x} ${y}`;
+  }
   line.setAttribute('d', path);
   line.setAttribute('class', `trajectory-line trajectory-line--${type}`);
   targetDot.setAttribute('cx', x);
