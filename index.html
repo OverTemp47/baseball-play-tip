@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1c1c1c" />
+    <title>상황별 주루 플레이 | BASE RUNNING</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell" id="app" aria-live="polite">
+      <section class="screen screen--start" data-screen="start">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <p class="eyebrow">BASE RUNNING</p>
+        <h1>상황별<br />주루 플레이</h1>
+        <p class="intro">경기 상황을 보고<br />올바른 주루 플레이를 선택하세요.</p>
+        <p class="micro-copy">아웃카운트 · 주자 · 타구를 먼저 확인하세요.</p>
+        <button class="button button--primary" type="button" data-action="start">게임 시작 <span aria-hidden="true">→</span></button>
+      </section>
+
+      <section class="screen" data-screen="difficulty" hidden>
+        <button class="back-button" type="button" data-action="back-to-start">← <span>처음으로</span></button>
+        <div class="section-heading">
+          <p class="eyebrow">CHOOSE LEVEL</p>
+          <h2>난이도를<br />선택하세요</h2>
+        </div>
+        <div class="difficulty-list" role="list">
+          <button class="difficulty-card difficulty-card--active" type="button" data-level="basic" role="listitem">
+            <span class="difficulty-number">01</span><span class="difficulty-copy"><strong>초급 <em>BASIC</em></strong><small>기본적인 주루 원칙<br />포스 · 아웃카운트 · 태그업</small></span><span class="card-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="difficulty-card" type="button" data-level="intermediate" role="listitem">
+            <span class="difficulty-number">02</span><span class="difficulty-copy"><strong>중급 <em>INTERMEDIATE</em></strong><small>복합적인 상황 판단<br />애매한 타구 · 앞 주자 · 내야 뜬공</small></span><span class="card-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="difficulty-card" type="button" data-level="advanced" role="listitem">
+            <span class="difficulty-number">03</span><span class="difficulty-copy"><strong>고급 <em>ADVANCED</em></strong><small>플레이 진행에 따른 판단<br />런다운 · 수비 실책 · Next Play</small></span><span class="card-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="difficulty-card" type="button" data-level="random" role="listitem">
+            <span class="difficulty-number">04</span><span class="difficulty-copy"><strong>전체 <em>RANDOM</em></strong><small>모든 난이도에서<br />무작위로 문제를 선택합니다</small></span><span class="card-arrow" aria-hidden="true">↗</span>
+          </button>
+        </div>
+        <p class="screen-note" data-level-note hidden>20개 문제 중 10개가 무작위로 출제됩니다.</p>
+      </section>
+
+      <section class="screen" data-screen="quiz" hidden>
+        <header class="quiz-header"><button class="back-button" type="button" data-action="back-to-difficulty">← <span>난이도</span></button><div class="progress-label"><span data-quiz-level>BASIC</span><strong data-progress>01 / 10</strong></div></header>
+        <div class="quiz-status"><span class="status-light status-light--read" data-status-light></span><span data-status>READ</span><span class="out-count" data-outs>0 OUT</span></div>
+        <div class="diamond" aria-label="현재 주자 상황을 보여주는 야구 다이아몬드"><span class="base base--home" data-base="home"><span class="base-label">홈</span></span><span class="base base--first" data-base="first"><span class="base-label">1</span></span><span class="base base--second" data-base="second"><span class="base-label">2</span></span><span class="base base--third" data-base="third"><span class="base-label">3</span></span><span class="runner runner--first" data-runner="first" aria-hidden="true"></span><span class="runner runner--second" data-runner="second" aria-hidden="true"></span><span class="runner runner--third" data-runner="third" aria-hidden="true"></span></div>
+        <p class="situation-label" data-situation>SITUATION 01</p>
+        <h2 class="question-title" data-question-title></h2>
+        <div class="question-box"><p>어떻게 플레이하시겠습니까?</p></div>
+        <div class="answer-list" role="group" aria-label="답변 선택">
+          <button class="answer-button" type="button" data-answer="A"><span>A</span><b></b></button>
+          <button class="answer-button" type="button" data-answer="B"><span>B</span><b></b></button>
+          <button class="answer-button" type="button" data-answer="C"><span>C</span><b></b></button>
+        </div>
+        <div class="result" data-result hidden></div>
+      </section>
+
+      <section class="screen" data-screen="complete" hidden>
+        <button class="back-button" type="button" data-action="back-to-difficulty">← <span>난이도</span></button>
+        <div class="completion-heading">
+          <p class="eyebrow">SESSION COMPLETE</p>
+          <h2>오늘의 플레이가<br />끝났습니다.</h2>
+          <p class="completion-message">상황을 읽고 판단하는 연습을 완료했습니다.</p>
+        </div>
+        <div class="score-card">
+          <div class="score-card__top"><span data-complete-level>BASIC</span><strong data-complete-progress>10 / 10</strong></div>
+          <div class="score-main"><strong data-score>1</strong><span data-total>/ 10</span></div>
+          <p>정답 수</p>
+          <div class="score-row"><span>정답률</span><strong data-rate>100%</strong></div>
+          <div class="score-row"><span>플레이 상태</span><strong class="score-read"><span class="status-light status-light--read"></span> READ</strong></div>
+        </div>
+        <button class="button button--primary completion-button" type="button" data-action="retry">다시 플레이 <span aria-hidden="true">↻</span></button>
+        <button class="level-select-button" type="button" data-action="choose-level">다른 난이도 선택 <span aria-hidden="true">→</span></button>
+      </section>
+    </main>
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

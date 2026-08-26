@@ -1,2 +1,19 @@
-# baseball-play-tip
-A practical web guide for amateur baseball fundamentals and situational baserunning.
+# 상황별 주루 플레이
+
+사회인야구 주루 상황을 학습하는 모바일 우선 퀴즈 MVP입니다.
+
+## 실행
+
+`index.html`을 브라우저에서 열면 별도 설치 없이 실행됩니다. Notion에는 배포된 정적 페이지 URL을 임베드할 수 있습니다.
+
+## 현재 구현 범위
+
+- 시작 화면 → 난이도 선택 → 난이도별 무작위 문제 → 정답/오답 및 해설 → 최종 점수
+- BASIC 20개 중 10개, INTERMEDIATE 20개 중 10개, ADVANCED 20개 중 10개 출제
+- RANDOM 선택 시 전체 60개 중 15개 출제
+- 검수를 마친 BASIC·INTERMEDIATE·ADVANCED 각 20문항 반영
+- 문제에 따라 2개 또는 3개의 짧은 행동형 선택지 제공
+- 모든 문항에 정답 판정, 해설, TIP 제공
+- 다이아몬드에서 전체 주자와 문제를 푸는 주자의 위치를 구분해 표시
+- 문제별 다음 문제 이동, 진행률, 정답 수, 정답률 제공
+- Vanilla HTML/CSS/JavaScript만 사용
