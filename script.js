@@ -105,14 +105,24 @@ function showCompletion(sharedResult = null) {
   const total = sharedResult?.total ?? sessionQuestions.length;
   const resultScore = sharedResult?.score ?? score;
   const resultMode = sharedResult?.level ?? sessionMode;
+  const rate = Math.round((resultScore / total) * 100);
   displayedResult = { level: resultMode, score: resultScore, total };
   document.querySelector('[data-complete-level]').textContent = resultMode;
   document.querySelector('[data-score]').textContent = resultScore;
   document.querySelector('[data-total]').textContent = `/ ${total}`;
-  document.querySelector('[data-rate]').textContent = `${Math.round((resultScore / total) * 100)}%`;
+  document.querySelector('[data-rate]').textContent = `${rate}%`;
+  document.querySelector('[data-score-comment]').textContent = getScoreComment(rate);
   document.querySelector('[data-complete-progress]').textContent = `${total} / ${total}`;
   shareFeedback.hidden = true;
   showScreen('complete');
+}
+
+function getScoreComment(rate) {
+  if (rate <= 30) return '공은 잘 보셨습니다. 그런데 주자로서는 거의 움직이지 못하셨네요.';
+  if (rate <= 50) return '절반은 읽으셨습니다. 나머지 절반은 아직 감으로 뛰고 있습니다.';
+  if (rate <= 70) return '방향은 맞습니다. 다만 한 박자 늦게 출발하는 습관이 보입니다.';
+  if (rate <= 99) return '거의 다 왔습니다. 마지막 한 문제쯤은 꼭 놓치셨네요.';
+  return '이 정도면 오늘은 주루 코치 역할까지 맡으셔도 되겠습니다.';
 }
 
 function getResultUrl(resultData) {
@@ -129,7 +139,7 @@ function getResultUrl(resultData) {
 function getShareSummary() {
   const resultData = displayedResult ?? { level: sessionMode, score, total: sessionQuestions.length };
   const rate = Math.round((resultData.score / resultData.total) * 100);
-  return `상황별 주루 플레이\n${resultData.level} ${resultData.total}문제 중 ${resultData.score}문제 정답\n정답률 ${rate}%\n${getResultUrl(resultData)}`;
+  return `상황별 주루 플레이\n${resultData.level} ${resultData.total}문제 중 ${resultData.score}문제 정답\n정답률 ${rate}%\n${getScoreComment(rate)}\n${getResultUrl(resultData)}`;
 }
 
 function showShareFeedback(message) {
