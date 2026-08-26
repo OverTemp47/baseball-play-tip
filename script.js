@@ -127,12 +127,11 @@ function getScoreComment(rate) {
 
 function getResultUrl(resultData) {
   const url = new URL(window.location.href);
+  const levelCode = { BASIC: 'B', INTERMEDIATE: 'I', ADVANCED: 'A', RANDOM: 'R' }[resultData.level];
   url.search = '';
   url.hash = '';
-  url.searchParams.set('result', '1');
-  url.searchParams.set('level', resultData.level);
-  url.searchParams.set('score', resultData.score);
-  url.searchParams.set('total', resultData.total);
+  url.searchParams.set('r', levelCode);
+  url.searchParams.set('s', resultData.score);
   return url.toString();
 }
 
@@ -167,12 +166,10 @@ async function copyShareSummary(text) {
 
 async function shareResult() {
   const summary = getShareSummary();
-  const resultData = displayedResult ?? { level: sessionMode, score, total: sessionQuestions.length };
   try {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: '상황별 주루 플레이',
           text: summary
         });
         showShareFeedback('공유 창을 열었습니다.');
@@ -190,11 +187,13 @@ async function shareResult() {
 
 function showSharedResultFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  if (params.get('result') !== '1') return;
   const allowedLevels = ['BASIC', 'INTERMEDIATE', 'ADVANCED', 'RANDOM'];
-  const level = params.get('level')?.toUpperCase();
-  const scoreValue = Number(params.get('score'));
-  const total = Number(params.get('total'));
+  const shortLevels = { B: 'BASIC', I: 'INTERMEDIATE', A: 'ADVANCED', R: 'RANDOM' };
+  const isLegacyResult = params.get('result') === '1';
+  const level = isLegacyResult ? params.get('level')?.toUpperCase() : shortLevels[params.get('r')?.toUpperCase()];
+  const scoreValue = Number(isLegacyResult ? params.get('score') : params.get('s'));
+  const total = isLegacyResult ? Number(params.get('total')) : SESSION_LENGTH[level];
+  if (!isLegacyResult && !params.get('r')) return;
   if (!allowedLevels.includes(level) || !Number.isInteger(scoreValue) || !Number.isInteger(total) || total < 1 || total > 60 || scoreValue < 0 || scoreValue > total) return;
   showCompletion({ level, score: scoreValue, total });
 }
