@@ -1,6 +1,7 @@
 const screens = [...document.querySelectorAll('[data-screen]')];
 const result = document.querySelector('[data-result]');
 const quizScreen = document.querySelector('[data-screen="quiz"]');
+const shareFeedback = document.querySelector('[data-share-feedback]');
 let currentIndex = 0;
 let selectedAnswer = null;
 let score = 0;
@@ -105,7 +106,57 @@ function showCompletion() {
   document.querySelector('[data-total]').textContent = `/ ${total}`;
   document.querySelector('[data-rate]').textContent = `${Math.round((score / total) * 100)}%`;
   document.querySelector('[data-complete-progress]').textContent = `${total} / ${total}`;
+  shareFeedback.hidden = true;
   showScreen('complete');
+}
+
+function getShareSummary() {
+  const total = sessionQuestions.length;
+  const rate = Math.round((score / total) * 100);
+  return `상황별 주루 플레이\n${sessionMode} ${total}문제 중 ${score}문제 정답\n정답률 ${rate}%\n${window.location.href}`;
+}
+
+function showShareFeedback(message) {
+  shareFeedback.textContent = message;
+  shareFeedback.hidden = false;
+  window.clearTimeout(showShareFeedback.timer);
+  showShareFeedback.timer = window.setTimeout(() => { shareFeedback.hidden = true; }, 2600);
+}
+
+async function copyShareSummary(text) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.setAttribute('readonly', '');
+  textArea.style.position = 'fixed';
+  textArea.style.opacity = '0';
+  document.body.appendChild(textArea);
+  textArea.select();
+  const copied = document.execCommand('copy');
+  textArea.remove();
+  if (!copied) throw new Error('Copy failed');
+}
+
+async function shareResult() {
+  const summary = getShareSummary();
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: '상황별 주루 플레이 결과',
+        text: summary.replace(`\n${window.location.href}`, ''),
+        url: window.location.href
+      });
+      showShareFeedback('공유 창을 열었습니다.');
+      return;
+    }
+    await copyShareSummary(summary);
+    showShareFeedback('결과를 클립보드에 복사했습니다.');
+  } catch (error) {
+    if (error.name !== 'AbortError') showShareFeedback('결과를 공유하지 못했습니다.');
+  }
 }
 
 document.addEventListener('click', (event) => {
@@ -114,6 +165,7 @@ document.addEventListener('click', (event) => {
   if (action === 'back-to-start') showScreen('start');
   if (action === 'back-to-difficulty') showScreen('difficulty');
   if (action === 'complete') showCompletion();
+  if (action === 'share') shareResult();
   if (action === 'next') { currentIndex += 1; renderQuestion(); }
   if (action === 'retry') { resetQuiz(sessionMode); showScreen('quiz'); }
   if (action === 'choose-level') showScreen('difficulty');

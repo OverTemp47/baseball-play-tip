@@ -25,6 +25,7 @@ h1,h2,p { margin-top:0; } h1 { margin-bottom:24px; font-size:clamp(42px,12vw,68p
 .quiz--answered .diamond,.quiz--answered .question-box { display:none; }.quiz--answered .quiz-status { margin-bottom:12px; }.quiz--answered .question-title { margin-bottom:12px; font-size:18px; }.quiz--answered .result { margin-top:12px; padding-top:14px; }.quiz--answered .result-status { margin:14px 0 10px; }.quiz--answered .explanation,.quiz--answered .tip { padding:10px 0; }.quiz--answered .result-complete-button { margin-top:12px; min-height:48px; }
 .level-select-button { display:flex; align-items:center; justify-content:space-between; width:100%; min-height:52px; margin-top:10px; padding:0 16px; border:1px solid var(--line); background:transparent; font-size:13px; font-weight:700; }.level-select-button span { color:var(--gray); font-size:18px; }
 .completion-button,.level-select-button { width:100%; min-height:58px; padding:0 24px; font-size:15px; }
+.share-feedback { margin:8px 0 0; color:var(--gray); font-size:12px; text-align:center; }
 @keyframes appear { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
 @media (max-width:599px) {
   .app-shell { padding:14px 16px 20px; }
