@@ -138,8 +138,7 @@ function getResultUrl(resultData) {
 
 function getShareSummary() {
   const resultData = displayedResult ?? { level: sessionMode, score, total: sessionQuestions.length };
-  const rate = Math.round((resultData.score / resultData.total) * 100);
-  return `상황별 주루 플레이\n${resultData.level} ${resultData.total}문제 중 ${resultData.score}문제 정답\n정답률 ${rate}%\n${getScoreComment(rate)}\n${getResultUrl(resultData)}`;
+  return `[사회인 야구 주루 IQ 테스트]\n나의 주루 센스 점수는 **${resultData.score}점**! 당신의 주루 IQ는 몇 점?\n👉 ${getResultUrl(resultData)}`;
 }
 
 function showShareFeedback(message) {
