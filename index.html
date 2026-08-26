@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#1c1c1c" />
     <title>상황별 주루 플레이 | BASE RUNNING</title>
-    <link rel="stylesheet" href="style.css?v=2" />
+    <link rel="stylesheet" href="style.css?v=3" />
   </head>
   <body>
     <main class="app-shell" id="app" aria-live="polite">
@@ -60,7 +60,7 @@
         <button class="back-button" type="button" data-action="back-to-difficulty">← <span>난이도</span></button>
         <div class="completion-heading">
           <p class="eyebrow">SESSION COMPLETE</p>
-          <h2>오늘의 플레이가<br />끝났습니다.</h2>
+          <h2 class="completion-comment" data-score-comment></h2>
           <p class="completion-message">상황을 읽고 판단하는 연습을 완료했습니다.</p>
         </div>
         <div class="score-card">
@@ -69,7 +69,6 @@
           <p>정답 수</p>
           <div class="score-row"><span>정답률</span><strong data-rate>100%</strong></div>
           <div class="score-row"><span>플레이 상태</span><strong class="score-read"><span class="status-light status-light--read"></span> READ</strong></div>
-          <p class="score-comment" data-score-comment></p>
         </div>
         <button class="level-select-button completion-share-button" type="button" data-action="share">결과 공유 <span aria-hidden="true">↗</span></button>
         <p class="share-feedback" data-share-feedback role="status" aria-live="polite" hidden></p>
