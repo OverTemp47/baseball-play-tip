@@ -55,13 +55,14 @@ function renderTrajectory(question) {
     '2루수': [108, 18],
     '3루수': [20, 120],
     유격수: [20, 48],
-    좌익수: [-36, 180],
-    중견수: [-36, -36],
-    우익수: [180, -36]
+    // 다이아몬드가 45도 회전하므로, 외야 좌표도 상단 안쪽에 배치합니다.
+    좌익수: [5, 48],
+    중견수: [22, 22],
+    우익수: [48, 5],
+    '1루 파울라인': [140, 30],
+    '3루 파울라인': [4, 140]
   };
   let targetName = Object.keys(targets).find((name) => title.includes(name));
-  if (title.includes('1루 파울라인')) targetName = '우익수';
-  if (title.includes('3루 파울라인')) targetName = '좌익수';
   const target = targets[targetName || 'pitcher'];
   const start = [144, 144];
   const isHighFly = title.includes('높은 뜬공') || title.includes('내야 뜬공');
@@ -76,10 +77,10 @@ function renderTrajectory(question) {
   if (type === 'high-fly') path = `M ${start[0]} ${start[1]} Q ${(start[0] + x) / 2} ${(start[1] + y) / 2 - 32} ${x} ${y}`;
   if (type === 'shallow-fly') path = `M ${start[0]} ${start[1]} Q ${(start[0] + x) / 2} ${(start[1] + y) / 2 - 14} ${x} ${y}`;
   line.setAttribute('d', path);
-  line.className.baseVal = `trajectory-line trajectory-line--${type}`;
+  line.setAttribute('class', `trajectory-line trajectory-line--${type}`);
   targetDot.setAttribute('cx', x);
   targetDot.setAttribute('cy', y);
-  targetDot.className.baseVal = `trajectory-target trajectory-target--${type}`;
+  targetDot.setAttribute('class', `trajectory-target trajectory-target--${type}`);
 }
 
 function renderQuestion() {
