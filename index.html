@@ -20,7 +20,7 @@
     <meta name="twitter:title" content="사회인 야구 주루 IQ 테스트" />
     <meta name="twitter:description" content="주루 상황을 읽고 올바른 플레이를 선택하세요." />
     <meta name="twitter:image" content="https://overtemp47.github.io/baseball-play-tip/og-image.png" />
-    <link rel="stylesheet" href="style.css?v=4" />
+    <link rel="stylesheet" href="style.css?v=5" />
   </head>
   <body>
     <main class="app-shell" id="app" aria-live="polite">
@@ -59,7 +59,7 @@
       <section class="screen" data-screen="quiz" hidden>
         <header class="quiz-header"><button class="back-button" type="button" data-action="back-to-difficulty">← <span>난이도</span></button><div class="progress-label"><span data-quiz-level>BASIC</span><strong data-progress>01 / 10</strong></div></header>
         <div class="quiz-status"><span class="status-light status-light--read" data-status-light></span><span data-status>READ</span><span class="out-count" data-outs>0 OUT</span></div>
-        <div class="diamond" aria-label="현재 주자 상황을 보여주는 야구 다이아몬드"><span class="base base--home" data-base="home"><span class="base-label">홈</span></span><span class="base base--first" data-base="first"><span class="base-label">1</span></span><span class="base base--second" data-base="second"><span class="base-label">2</span></span><span class="base base--third" data-base="third"><span class="base-label">3</span></span><span class="runner runner--first" data-runner="first" aria-hidden="true"></span><span class="runner runner--second" data-runner="second" aria-hidden="true"></span><span class="runner runner--third" data-runner="third" aria-hidden="true"></span></div>
+        <div class="diamond" aria-label="현재 주자 상황과 타구 방향을 보여주는 야구 다이아몬드"><svg class="trajectory-layer" viewBox="0 0 144 144" aria-hidden="true"><defs><marker id="trajectory-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" /></marker></defs><path class="trajectory-line" data-trajectory-line marker-end="url(#trajectory-arrow)"></path><circle class="trajectory-target" data-trajectory-target r="3"></circle></svg><span class="base base--home" data-base="home"><span class="base-label">홈</span></span><span class="base base--first" data-base="first"><span class="base-label">1</span></span><span class="base base--second" data-base="second"><span class="base-label">2</span></span><span class="base base--third" data-base="third"><span class="base-label">3</span></span><span class="runner runner--first" data-runner="first" aria-hidden="true"></span><span class="runner runner--second" data-runner="second" aria-hidden="true"></span><span class="runner runner--third" data-runner="third" aria-hidden="true"></span></div>
         <p class="situation-label" data-situation>SITUATION 01</p>
         <h2 class="question-title" data-question-title></h2>
         <div class="question-box"><p>어떻게 플레이하시겠습니까?</p></div>
@@ -91,6 +91,6 @@
       </section>
     </main>
     <script src="questions.js"></script>
-    <script src="script.js?v=15"></script>
+    <script src="script.js?v=16"></script>
   </body>
 </html>

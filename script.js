@@ -44,6 +44,42 @@ function renderDiamond(question) {
   document.querySelectorAll('[data-runner]').forEach((runner) => {
     runner.hidden = runner.dataset.runner !== question.runner;
   });
+  renderTrajectory(question);
+}
+
+function renderTrajectory(question) {
+  const title = question.title.replace(/<br\s*\/?/gi, ' ');
+  const targets = {
+    pitcher: [72, 72],
+    '1루수': [124, 118],
+    '2루수': [108, 18],
+    '3루수': [20, 120],
+    유격수: [20, 48],
+    좌익수: [-36, 180],
+    중견수: [-36, -36],
+    우익수: [180, -36]
+  };
+  let targetName = Object.keys(targets).find((name) => title.includes(name));
+  if (title.includes('1루 파울라인')) targetName = '우익수';
+  if (title.includes('3루 파울라인')) targetName = '좌익수';
+  const target = targets[targetName || 'pitcher'];
+  const start = [144, 144];
+  const isHighFly = title.includes('높은 뜬공') || title.includes('내야 뜬공');
+  const isShallowFly = title.includes('얕은 뜬공');
+  const isFly = title.includes('뜬공');
+  const isLiner = title.includes('라이너성') || title.includes('직선');
+  const type = isHighFly ? 'high-fly' : isShallowFly ? 'shallow-fly' : isLiner ? 'liner' : isFly ? 'fly' : 'ground';
+  const [x, y] = target;
+  const line = document.querySelector('[data-trajectory-line]');
+  const targetDot = document.querySelector('[data-trajectory-target]');
+  let path = `M ${start[0]} ${start[1]} L ${x} ${y}`;
+  if (type === 'high-fly') path = `M ${start[0]} ${start[1]} Q ${(start[0] + x) / 2} ${(start[1] + y) / 2 - 32} ${x} ${y}`;
+  if (type === 'shallow-fly') path = `M ${start[0]} ${start[1]} Q ${(start[0] + x) / 2} ${(start[1] + y) / 2 - 14} ${x} ${y}`;
+  line.setAttribute('d', path);
+  line.className.baseVal = `trajectory-line trajectory-line--${type}`;
+  targetDot.setAttribute('cx', x);
+  targetDot.setAttribute('cy', y);
+  targetDot.className.baseVal = `trajectory-target trajectory-target--${type}`;
 }
 
 function renderQuestion() {
