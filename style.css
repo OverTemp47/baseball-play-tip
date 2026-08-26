@@ -121,7 +121,7 @@ h1,h2,p { margin-top:0; } h1 { margin-bottom:24px; font-size:clamp(42px,12vw,68p
   .completion-button,.level-select-button { min-height:44px; padding:0 16px; font-size:13px; }
   .completion-button { margin-top:10px; }.level-select-button { margin-top:6px; }.share-feedback { margin:4px 0 0; font-size:10px; }
 }
-@media (min-width:600px) { .app-shell { padding:48px 32px 72px; }.screen--start { padding:64px 8px; }.button--primary { width:260px; }.section-heading { margin-top:80px; }.difficulty-list { grid-template-columns:1fr 1fr; }.difficulty-card { min-height:128px; }.quiz-status { margin-top:54px; } }
+@media (min-width:600px) { .app-shell { padding:48px 32px 72px; }.screen--start { padding:64px 8px; }.button--primary { width:260px; }.completion-button { width:100%; }.section-heading { margin-top:80px; }.difficulty-list { grid-template-columns:1fr 1fr; }.difficulty-card { min-height:128px; }.quiz-status { margin-top:54px; } }
 .score-comment { font-size:16px; line-height:1.6; }
 @media (max-width:599px) and (max-height:640px) { .score-comment { font-size:13px; line-height:1.45; } }
 .completion-comment { max-width:100%; font-size:clamp(23px,6vw,32px); line-height:1.28; letter-spacing:-.06em; white-space:pre-line; word-break:keep-all; }
