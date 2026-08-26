@@ -138,7 +138,7 @@ function getResultUrl(resultData) {
 
 function getShareSummary() {
   const resultData = displayedResult ?? { level: sessionMode, score, total: sessionQuestions.length };
-  return `[사회인 야구 주루 IQ 테스트]\n나의 주루 센스 점수는 **${resultData.score}점**! 당신의 주루 IQ는 몇 점?\n👉 ${getResultUrl(resultData)}`;
+  return `[사회인 야구 주루 IQ 테스트]\n나의 주루 센스 점수는 **${resultData.score}점**!\n당신의 주루 IQ는 몇 점?\n👉 ${getResultUrl(resultData)}`;
 }
 
 function showShareFeedback(message) {
@@ -168,14 +168,12 @@ async function copyShareSummary(text) {
 async function shareResult() {
   const summary = getShareSummary();
   const resultData = displayedResult ?? { level: sessionMode, score, total: sessionQuestions.length };
-  const resultUrl = getResultUrl(resultData);
   try {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: '상황별 주루 플레이 결과',
-          text: summary.replace(`\n${resultUrl}`, ''),
-          url: resultUrl
+          title: '상황별 주루 플레이',
+          text: summary
         });
         showShareFeedback('공유 창을 열었습니다.');
         return;
