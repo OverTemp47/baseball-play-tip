@@ -7,6 +7,7 @@ let selectedAnswer = null;
 let score = 0;
 let sessionQuestions = [];
 let sessionMode = 'BASIC';
+let displayedResult = null;
 
 const SESSION_LENGTH = {
   BASIC: 10,
@@ -73,6 +74,7 @@ function renderQuestion() {
 
 function resetQuiz(mode = sessionMode) {
   sessionMode = mode;
+  displayedResult = null;
   const pool = mode === 'RANDOM' ? questions : questions.filter((question) => question.level === mode);
   const questionCount = Math.min(SESSION_LENGTH[mode], pool.length);
   sessionQuestions = shuffle(pool).slice(0, questionCount);
@@ -99,21 +101,35 @@ function renderResult(answer) {
   result.innerHTML = `<div class="result-heading"><span class="result-icon">${isCorrect ? '✓' : '!'}</span><div><p class="result-state">${isCorrect ? '정답입니다' : '오답입니다'}</p>${isCorrect ? '' : `<p class="result-sub">선택한 답: ${answer} · 정답: ${question.correctAnswer}</p>`}</div></div><div class="result-status"><span class="status-light status-light--${question.status.toLowerCase()}"></span><strong>${question.status}</strong><span>${question.statusLabel}</span></div><div class="explanation"><strong>해설</strong><p>${question.explanation}</p></div>${tipMarkup}<button class="result-complete-button" type="button" data-action="${isLastQuestion ? 'complete' : 'next'}">${isLastQuestion ? '최종 결과 보기' : '다음 문제'} <span aria-hidden="true">→</span></button>`;
 }
 
-function showCompletion() {
-  const total = sessionQuestions.length;
-  document.querySelector('[data-complete-level]').textContent = sessionMode;
-  document.querySelector('[data-score]').textContent = score;
+function showCompletion(sharedResult = null) {
+  const total = sharedResult?.total ?? sessionQuestions.length;
+  const resultScore = sharedResult?.score ?? score;
+  const resultMode = sharedResult?.level ?? sessionMode;
+  displayedResult = { level: resultMode, score: resultScore, total };
+  document.querySelector('[data-complete-level]').textContent = resultMode;
+  document.querySelector('[data-score]').textContent = resultScore;
   document.querySelector('[data-total]').textContent = `/ ${total}`;
-  document.querySelector('[data-rate]').textContent = `${Math.round((score / total) * 100)}%`;
+  document.querySelector('[data-rate]').textContent = `${Math.round((resultScore / total) * 100)}%`;
   document.querySelector('[data-complete-progress]').textContent = `${total} / ${total}`;
   shareFeedback.hidden = true;
   showScreen('complete');
 }
 
+function getResultUrl(resultData) {
+  const url = new URL(window.location.href);
+  url.search = '';
+  url.hash = '';
+  url.searchParams.set('result', '1');
+  url.searchParams.set('level', resultData.level);
+  url.searchParams.set('score', resultData.score);
+  url.searchParams.set('total', resultData.total);
+  return url.toString();
+}
+
 function getShareSummary() {
-  const total = sessionQuestions.length;
-  const rate = Math.round((score / total) * 100);
-  return `상황별 주루 플레이\n${sessionMode} ${total}문제 중 ${score}문제 정답\n정답률 ${rate}%\n${window.location.href}`;
+  const resultData = displayedResult ?? { level: sessionMode, score, total: sessionQuestions.length };
+  const rate = Math.round((resultData.score / resultData.total) * 100);
+  return `상황별 주루 플레이\n${resultData.level} ${resultData.total}문제 중 ${resultData.score}문제 정답\n정답률 ${rate}%\n${getResultUrl(resultData)}`;
 }
 
 function showShareFeedback(message) {
@@ -142,13 +158,15 @@ async function copyShareSummary(text) {
 
 async function shareResult() {
   const summary = getShareSummary();
+  const resultData = displayedResult ?? { level: sessionMode, score, total: sessionQuestions.length };
+  const resultUrl = getResultUrl(resultData);
   try {
     if (navigator.share) {
       try {
         await navigator.share({
           title: '상황별 주루 플레이 결과',
-          text: summary.replace(`\n${window.location.href}`, ''),
-          url: window.location.href
+          text: summary.replace(`\n${resultUrl}`, ''),
+          url: resultUrl
         });
         showShareFeedback('공유 창을 열었습니다.');
         return;
@@ -161,6 +179,17 @@ async function shareResult() {
   } catch (error) {
     if (error.name !== 'AbortError') showShareFeedback('결과를 공유하지 못했습니다.');
   }
+}
+
+function showSharedResultFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('result') !== '1') return;
+  const allowedLevels = ['BASIC', 'INTERMEDIATE', 'ADVANCED', 'RANDOM'];
+  const level = params.get('level')?.toUpperCase();
+  const scoreValue = Number(params.get('score'));
+  const total = Number(params.get('total'));
+  if (!allowedLevels.includes(level) || !Number.isInteger(scoreValue) || !Number.isInteger(total) || total < 1 || total > 60 || scoreValue < 0 || scoreValue > total) return;
+  showCompletion({ level, score: scoreValue, total });
 }
 
 document.addEventListener('click', (event) => {
@@ -181,3 +210,4 @@ document.addEventListener('click', (event) => {
 });
 
 resetQuiz();
+showSharedResultFromUrl();
