@@ -144,13 +144,17 @@ async function shareResult() {
   const summary = getShareSummary();
   try {
     if (navigator.share) {
-      await navigator.share({
-        title: '상황별 주루 플레이 결과',
-        text: summary.replace(`\n${window.location.href}`, ''),
-        url: window.location.href
-      });
-      showShareFeedback('공유 창을 열었습니다.');
-      return;
+      try {
+        await navigator.share({
+          title: '상황별 주루 플레이 결과',
+          text: summary.replace(`\n${window.location.href}`, ''),
+          url: window.location.href
+        });
+        showShareFeedback('공유 창을 열었습니다.');
+        return;
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+      }
     }
     await copyShareSummary(summary);
     showShareFeedback('결과를 클립보드에 복사했습니다.');
