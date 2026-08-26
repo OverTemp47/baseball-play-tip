@@ -13,6 +13,7 @@ const SESSION_LENGTH = {
   BASIC: 10,
   INTERMEDIATE: 10,
   ADVANCED: 10,
+  EXPERT: 10,
   RANDOM: 15
 };
 
@@ -45,6 +46,37 @@ function renderDiamond(question) {
     runner.hidden = runner.dataset.runner !== question.runner;
   });
   renderTrajectory(question);
+  renderRunnerDirection(question);
+}
+
+function renderRunnerDirection(question) {
+  const lines = [...document.querySelectorAll('[data-runner-direction]')];
+  const directions = {
+    // 다이아몬드의 실제 외곽선 위에 표시합니다. 양 끝만 베이스를 피해 안쪽으로 줄입니다.
+    'first-second': [[126, 0], [18, 0]],
+    'second-first': [[18, 0], [126, 0]],
+    'second-third': [[0, 18], [0, 126]],
+    'third-second': [[0, 126], [0, 18]],
+    'third-home': [[18, 144], [126, 144]],
+    'home-third': [[126, 144], [18, 144]],
+    'home-first': [[144, 126], [144, 18]],
+    'first-home': [[144, 18], [144, 126]]
+  };
+  const requestedDirections = Array.isArray(question.runnerDirection)
+    ? question.runnerDirection
+    : question.runnerDirection ? [question.runnerDirection] : [];
+  lines.forEach((line, index) => {
+    const points = directions[requestedDirections[index]];
+    if (!points) {
+      line.setAttribute('hidden', '');
+      line.removeAttribute('d');
+      line.classList.remove('runner-direction--rundown');
+      return;
+    }
+    line.removeAttribute('hidden');
+    line.classList.toggle('runner-direction--rundown', question.level === 'EXPERT' && question.title.includes('런다운'));
+    line.setAttribute('d', `M ${points[0][0]} ${points[0][1]} L ${points[1][0]} ${points[1][1]}`);
+  });
 }
 
 function renderTrajectory(question) {
@@ -175,7 +207,7 @@ function getScoreComment(rate) {
 
 function getResultUrl(resultData) {
   const url = new URL(window.location.href);
-  const levelCode = { BASIC: 'B', INTERMEDIATE: 'I', ADVANCED: 'A', RANDOM: 'R' }[resultData.level];
+  const levelCode = { BASIC: 'B', INTERMEDIATE: 'I', ADVANCED: 'A', EXPERT: 'E', RANDOM: 'R' }[resultData.level];
   url.search = '';
   url.hash = '';
   url.searchParams.set('r', levelCode);
@@ -236,8 +268,8 @@ async function shareResult() {
 
 function showSharedResultFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  const allowedLevels = ['BASIC', 'INTERMEDIATE', 'ADVANCED', 'RANDOM'];
-  const shortLevels = { B: 'BASIC', I: 'INTERMEDIATE', A: 'ADVANCED', R: 'RANDOM' };
+  const allowedLevels = ['BASIC', 'INTERMEDIATE', 'ADVANCED', 'EXPERT', 'RANDOM'];
+  const shortLevels = { B: 'BASIC', I: 'INTERMEDIATE', A: 'ADVANCED', E: 'EXPERT', R: 'RANDOM' };
   const isLegacyResult = params.get('result') === '1';
   const level = isLegacyResult ? params.get('level')?.toUpperCase() : shortLevels[params.get('r')?.toUpperCase()];
   const scoreValue = Number(isLegacyResult ? params.get('score') : params.get('s'));
@@ -258,7 +290,7 @@ document.addEventListener('click', (event) => {
   if (action === 'retry') { resetQuiz(sessionMode); showScreen('quiz'); }
   if (action === 'choose-level') showScreen('difficulty');
   const level = event.target.closest('[data-level]')?.dataset.level;
-  if (['BASIC', 'INTERMEDIATE', 'ADVANCED', 'RANDOM'].includes(level?.toUpperCase())) { resetQuiz(level.toUpperCase()); showScreen('quiz'); }
+  if (['BASIC', 'INTERMEDIATE', 'ADVANCED', 'EXPERT', 'RANDOM'].includes(level?.toUpperCase())) { resetQuiz(level.toUpperCase()); showScreen('quiz'); }
   else if (level) showUnavailable();
   const answer = event.target.closest('[data-answer]')?.dataset.answer;
   if (answer && !event.target.closest('[data-answer]').disabled) renderResult(answer);
