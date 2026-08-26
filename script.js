@@ -118,11 +118,11 @@ function showCompletion(sharedResult = null) {
 }
 
 function getScoreComment(rate) {
-  if (rate <= 30) return '공은 잘 보셨습니다. 그런데 주자로서는 거의 움직이지 못하셨네요.';
-  if (rate <= 50) return '절반은 읽으셨습니다. 나머지 절반은 아직 감으로 뛰고 있습니다.';
-  if (rate <= 70) return '방향은 맞습니다. 다만 한 박자 늦게 출발하는 습관이 보입니다.';
-  if (rate <= 99) return '거의 다 왔습니다. 마지막 한 문제쯤은 꼭 놓치셨네요.';
-  return '이 정도면 오늘은 주루 코치 역할까지 맡으셔도 되겠습니다.';
+  if (rate <= 30) return '출루하는 순간 팀의 재앙이니, 다음 경기부터는 안타 칠 생각 말고 얌전히 덕아웃 물 당번이나 서세요.';
+  if (rate <= 50) return '열정은 넘치지만 아웃카운트 착각이 잦아 감독 뒷목 잡게 만드는 전형적인 본능형 주자입니다.';
+  if (rate <= 70) return '기본적인 흐름은 잘 읽고 계시니, 복잡한 런다운과 특수 룰만 조금 더 다듬으면 믿고 쓰는 주자가 됩니다.';
+  if (rate <= 99) return '기본 센스와 판단력은 훌륭하나, 결정적인 순간의 한 끗 차이 본헤드 플레이만 조심하면 되겠습니다.';
+  return 'KBO 프로 코치 뺨치는 완벽한 주루 IQ의 소유자이며, 사회인 야구 생태계를 파괴할 최고의 야구 지능입니다.';
 }
 
 function getResultUrl(resultData) {
